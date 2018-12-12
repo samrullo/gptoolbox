@@ -18,3 +18,8 @@ python __init__.py
 
 The above will launch localhost webserver with the port 5000
 You can now access the tool by typing ``localhost:5000`` into url
+
+## Simple Usage
+
+This is how top page looks like. Press on the pms,snc.. link.
+![Alt text](docs/screenshots/top.jpy?raw=True "Top page")
