@@ -1,12 +1,12 @@
-#Introduction
+# Introduction
 GPAS toolbox allows to run various frequently used commands such as pms, master_batcher, pkg_batcher, cnc, praada_nav just by changing values of necessary parameters.
 It utilizes python flask in conjunction with jquery.
 
-##Prerequisites
+## Prerequisites
 Python flask, and python packages such as pandas. Anaconda comes equipped with various python packages including these. 
 So installing Anaconda might be fast way of getting this tool to work.
 
-##Installation
+## Installation
 Clone the repository to your local PC.
 
 ```
