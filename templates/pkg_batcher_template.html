@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>master_batcher Command generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <style>
+            .command{                
+                padding:5px;
+                margin: 5px;
+            }
+            .command_keyword{
+                color:red;
+            }
+            .command_switch{
+                color:green;
+            }
+            label{
+                font-size: 20px;
+            }
+            table{
+                border:none;                
+            }
+            th,td{
+                padding:5px;
+                text-align: left;                
+            }
+            .tbl{
+
+            }
+        </style>
+        <script>
+            function set_directory_and_tag(client, directory, tag) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+
+                tag.val(client.val().toUpperCase() + " " + tag.val());
+            }
+
+            function set_directory(client, directory) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+            }
+
+            $(document).ready(
+                    function () {
+
+                        //pkg_batcher on selected run
+                        $('#pkg_batcher').on('click', '#pkg_batcher_run_select', function () {
+                            $.getJSON(
+                                    '/pkg_batcher_generator',
+                                    {
+                                        command: 'pkg_batcher_run_select',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        pcl: $('#pcl').val(),
+                                        date: $('#date').val(),
+                                        run_select: $('#run_select option:selected').val(),
+                                        run: $('#run').val(),
+                                        sect: $('#sect').val(),
+                                        pg:$('#pg').val(),
+                                        tag: $('#tag').val()                                        
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+
+                        //pkg_batcher on based on run
+                        $('#pkg_batcher').on('click', '#pkg_batcher_run', function () {
+                            $.getJSON(
+                                    '/pkg_batcher_generator',
+                                    {
+                                        command: 'pkg_batcher_run',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        pcl: $('#pcl').val(),
+                                        date: $('#date').val(),
+                                        run_select: $('#run_select option:selected').val(),
+                                        run: $('#run').val(),
+                                        sect: $('#sect').val(),
+                                        pg:$('#pg').val(),
+                                        tag: $('#tag').val()                                        
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+                        
+                        //AggAll run
+                        $('#pkg_batcher').on('click', '#agg_all', function () {
+                            $.getJSON(
+                                    '/pkg_batcher_generator',
+                                    {
+                                        command: 'agg_all',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        pcl: $('#pcl').val(),
+                                        date: $('#date').val(),
+                                        run_select: $('#run_select option:selected').val(),
+                                        run: $('#run').val(),
+                                        sect: $('#sect').val(),
+                                        pg:$('#pg').val(),
+                                        tag: $('#tag').val()                                        
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+
+
+                        //DREAM covers
+                        $('#pkg_batcher').on('click', '#dream_covers', function () {
+                            $.getJSON(
+                                    '/pkg_batcher_generator',
+                                    {
+                                        command: 'dream_covers',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        pcl: $('#pcl').val(),
+                                        date: $('#date').val(),
+                                        run_select: $('#run_select option:selected').val(),
+                                        run: $('#run').val(),
+                                        sect: $('#sect').val(),
+                                        pg:$('#pg').val(),
+                                        tag: $('#tag').val()                                        
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+                        //DREAM release
+                        $('#pkg_batcher').on('click', '#dream_release', function () {
+                            $.getJSON(
+                                    '/pkg_batcher_generator',
+                                    {
+                                        command: 'dream_release',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        pcl: $('#pcl').val(),
+                                        date: $('#date').val(),
+                                        run_select: $('#run_select option:selected').val(),
+                                        run: $('#run').val(),
+                                        sect: $('#sect').val(),
+                                        pg:$('#pg').val(),
+                                        tag: $('#tag').val()                                        
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+                        
+                        
+                    }
+            );
+
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="pkg_batcher">
+            <div data-role="header">
+                <a href="/command_generator" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <h1>package_batcher/AggAll command generator</h1>
+            </div>
+            <div data-role="content">
+
+                <table>
+                    <tr>
+                        <td><label for="client">Client</label></td>
+                        <td><input data-clear-btn="true" name="client" id="client" value="{{client}}" placeholder="Enter Client alias"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Package</label></td>
+                        <td><input data-clear-btn="true" name="package" id="package" value="{{package}}" placeholder="Enter the package"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="pcl">PCL name</label></td>
+                        <td><input data-clear-btn="true" name="pcl" id="pcl" value="{{pcl}}" placeholder="Enter the pcl name"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="date">Date</label></td>
+                        <td><input data-clear-btn="true" name="date" id="date" value="{{date}}" placeholder="Enter the date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="run_select">Choose what to run</label></td>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="run_select" id="run_select">
+                                    <option value="price">PRICE</option>
+                                    <option value="risk">RISK</option>
+                                    <option value="scratch">SCRATCH</option>
+                                    <option value="covers">COVERS</option>
+                                    <option value="release">RELEASE</option>
+                                </select>
+                            </div> 
+                        </td>                        
+                    </tr>                    
+                    <tr>
+                        <td><label for="run">Enter what to run (price,risk,scratch ...)</label></td>
+                        <td><input data-clear-btn="true" name="run" id="run" value="{{run}}" placeholder="Enter what to run"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="sect">Section</label></td>
+                        <td><input data-clear-btn="true" name="sect" id="sect" value="{{sect}}" placeholder="Enter sect if applicable"></td>
+                    </tr>                    
+                    <tr>
+                        <td><label for="tag">Tag</label></td>
+                        <td><input data-clear-btn="true" name="tag" id="tag" value="{{tag}}" placeholder="Enter the tag"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="pg">Port group for AggAll</label></td>
+                        <td><input data-clear-btn="true" name="pg" id="pg" value="{{pg}}" placeholder="Enter port group"></td>
+                    </tr>    
+                </table>
+                <ul data-role="listview" data-inset="true" data-filter="true">
+                    <li><a id="pkg_batcher_run_select" href="#">pkg_batcher based on selected run</a></li>
+                    <li><a id="pkg_batcher_run" href="#">pkg_batcher based on run</a></li>
+                    <li><a id="agg_all" href="#">AggAll run on benchmark port group</a></li>
+                    <li><a id="dream_covers" href="#">DREAM covers</a></li>
+                    <li><a id="dream_release" href="#">DREAM release</a></li>
+                </ul>
+                <div id="command" class="command"></div>
+                <textarea name="command_textarea" id="command_textarea" data-enhanced="true" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all"></textarea>
+            </div><!-- content end -->            
+        </div><!-- page end-->
+    </body>
+</html>

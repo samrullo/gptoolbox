@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>SQL abbreviations</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>        
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#main_tbl').DataTable();
+                
+                
+            });
+        </script>
+    </head>
+    <body>
+        <div data-role="page">
+        <div data-role="header">
+            <a href="/" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <h1> Frequently used queries</h1>
+            </div>
+        
+        <table id="main_tbl" class="display">
+            <thead>
+                <tr>
+                    <th>abbreviation</th>
+                    <th>query</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i, row in result.iterrows() %}
+                <tr>
+                    <td>{{ row['abbreviation'] }}</td>
+                    <td>{{ row['query'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            </div>
+    </body>
+</html>

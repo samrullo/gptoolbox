@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>GPAS Command generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <style>
+            .command{                
+                padding:5px;
+                margin: 5px;
+            }
+            .command_keyword{
+                color:red;
+            }
+            .command_switch{
+                color:green;
+            }
+            label{
+                font-size: 20px;
+            }
+            table{
+                border:none;                
+            }
+            th,td{
+                padding:5px;
+                text-align: left;                
+            }
+            .tbl{
+
+            }
+        </style>
+        <script>
+            function set_directory_and_tag(client, directory, tag) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+
+                tag.val(client.val().toUpperCase() + " " + tag.val());
+            }
+
+            function set_directory(client, directory) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+            }
+
+            $(document).ready(
+                    function () {
+
+                        $('#cnc').on('focusout', '#client', function () {
+                            set_directory_and_tag($('#client'), $('#directory'), $('#tag'));
+                        });
+
+
+                        $('#cnc').on('focusout', '#package', function () {
+                            set_directory($('#client'), $('#directory'));
+                        });
+
+
+                        $('#cnc').on('focusout', '#date', function () {
+                            set_directory($('#client'), $('#directory'));
+                        });
+
+
+                        //generic cnc command generator
+                        $('#cnc').on('click', '#generic_cnc', function () {
+                            $.getJSON(
+                                    '/cnc_generator',
+                                    {
+                                        command: 'generic_cnc',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        directory: $('#directory').val(),
+                                        fund_pg_select: $('#fund_pg_select option:selected').val(),
+                                        fund: $('#fund').val(),
+                                        report_tag: $('#report_tag').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        depth: $('#depth').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+                        //ifile_parse command generator
+                        $('#cnc').on('click', '#ifile_parse', function () {                            
+                            $.getJSON(
+                                    '/cnc_generator',
+                                    {
+                                        command: 'ifile_parse',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        directory: $('#directory').val(),
+                                        fund_pg_select: $('#fund_pg_select option:selected').val(),
+                                        fund: $('#fund').val(),
+                                        report_tag: $('#report_tag').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        depth: $('#depth').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+                        
+                        
+                        //cnc custom command generator
+                        $('#cnc').on('click', '#cnc_custom_var', function () {
+                            $.getJSON(
+                                    '/cnc_generator',
+                                    {
+                                        command: 'cnc_custom_var',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        directory: $('#directory').val(),
+                                        fund_pg_select: $('#fund_pg_select option:selected').val(),
+                                        fund: $('#fund').val(),
+                                        report_tag: $('#report_tag').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        depth: $('#depth').val(),
+                                        tag: $('#tag').val(),
+                                        var_type:$('#var_type option:selected').val(),
+                                        var_history:$('#var_history option:selected').val(),
+                                        var_history_count:$('#var_history_count').val(),
+                                        var_decay_daily:$('#var_decay_daily').val(),
+                                        var_calendar:$('#var_calendar').val(),
+                                        var_mat_date:$('#var_mat_date').val(),
+                                        econ_date:$('#econ_date').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+                    }
+            );
+
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="cnc">            
+            <div data-role="header">
+                <a href="/command_generator" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <h1>cnc command generator</h1>
+            </div>
+            <div data-role="content">                
+                <table>
+                    <tr>
+                        <td><label for="client">Client</label></td>
+                        <td><input data-clear-btn="true" name="client" id="client" value="{{client}}" placeholder="Enter Client alias"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Package</label></td>
+                        <td><input data-clear-btn="true" name="package" id="package" value="{{package}}" placeholder="Enter the package"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="fund_pg_select" id="fund_pg_select">
+                                    <option value="fund">Fund</option>
+                                    <option value="pg">Portgroup</option>                                    
+                                </select>
+                            </div> 
+                        </td>
+                        <td><input data-clear-btn="true" name="fund" id="fund" value="{{fund}}" placeholder="Enter the fund"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="date">Date</label></td>
+                        <td><input data-clear-btn="true" name="date" id="date" value="{{date}}" placeholder="Enter the date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="directory">Directory</label></td>
+                        <td><input data-clear-btn="true" name="directory" id="directory" value="{{directory}}" placeholder="Enter the directory"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tag">Tag</label></td>
+                        <td><input data-clear-btn="true" name="tag" id="tag" value="{{tag}}" placeholder="Enter the tag"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="report_tag">report tag</label></td>
+                        <td><input data-clear-btn="true" name="report_tag" id="report_tag" value="{{report_tag}}" placeholder="Enter the report tag"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="breakdown">breakdown</label></td>
+                        <td><input data-clear-btn="true" name="breakdown" id="breakdown" value="{{breakdown}}" placeholder="Enter the breakdown"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="depth">depth</label></td>
+                        <td><input data-clear-btn="true" name="depth" id="depth" value="{{depth}}" placeholder="Enter the depth of breakdown"></td>
+                    </tr>
+                </table>
+
+
+                <div data-role="collapsible">
+                    <h2>overriding cnc var switches</h2>
+                    <table>
+                        <tr>
+                            <td><label for="exp_hi">exposure hierarchy</label></td>
+                            <td><input data-clear-btn="true" name="exp_hi" id="exp_hi" value="STORMP"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="var_type">VaR type</label></td>
+                            <td>
+                                <div class="ui-field-contain">                                
+                                    <select name="var_type" id="var_type">
+                                        <option value="DLY">Daily</option>
+                                        <option value="WKL">Weekly</option>
+                                        <option value="WKC">Weekly custom</option>                                    
+                                    </select>
+                                </div> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="ui-field-contain">                                
+                                    <select name="var_history" id="var_history">
+                                        <option value="var_history_daily">VAR History Daily</option>
+                                        <option value="var_history_weekly">VAR History Weekly</option>                                        
+                                    </select>
+                                </div> 
+                            </td>
+                            <td><input data-clear-btn="true" name="var_history_count" id="var_history_count" value="240"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="var_decay_daily">VAR decay daily</label></td>
+                            <td><input data-clear-btn="true" name="var_decay_daily" id="var_decay_daily" value="0.99"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="var_calendar">VAR calendar</label></td>
+                            <td><input data-clear-btn="true" name="var_calendar" id="var_calendar" value="TOK"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="var_mat_date">VAR matrix date</label></td>
+                            <td><input data-clear-btn="true" name="var_mat_date" id="var_mat_date" value="{{date}}" placeholder="Enter date in yyyymmdd"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="econ_date">Economy/exposure date</label></td>
+                            <td><input data-clear-btn="true" name="econ_date" id="econ_date" value="{{date}}" placeholder="Enter date in yyyymmdd"></td>
+                        </tr>                        
+                    </table>
+                </div>
+                <ul data-role="listview" data-inset="true" data-filter="true">
+                    <li><a id="generic_cnc" href="#">Generic cnc</a></li>
+                    <li><a id="ifile_parse" href="#">ifile parse based on report_tag and breakdown</a></li>
+                    <li><a id="cnc_custom_var" href="#">cnc custom VAR report</a></li>                    
+                </ul>
+                <div id="command" class="command"></div>
+                <textarea name="command_textarea" id="command_textarea" data-enhanced="true" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all"></textarea>
+
+            </div><!-- content end -->            
+        </div><!-- page end-->
+    </body>
+</html>

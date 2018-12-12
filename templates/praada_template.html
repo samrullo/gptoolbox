@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Praada_nav Command generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <style>
+            .command{                
+                padding:5px;
+                margin: 5px;
+            }
+            .command_keyword{
+                color:red;
+            }
+            .command_switch{
+                color:green;
+            }
+            label{
+                font-size: 20px;
+            }
+            table{
+                border:none;                
+            }
+            th,td{
+                padding:5px;
+                text-align: left;                
+            }
+            .tbl{
+
+            }
+        </style>
+        <script>
+            function set_directory_and_tag(client, directory, tag) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+
+                tag.val(client.val().toUpperCase() + " " + tag.val());
+            }
+
+            function set_directory(client, directory) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+            }
+
+            $(document).ready(
+                    function () {
+                        
+                         $('#praada').on('focusout', '#client', function () {
+                            set_directory_and_tag($('#client'), $('#directory'), $('#tag'));
+                        });
+
+
+                        $('#praada').on('focusout', '#package', function () {
+                            set_directory($('#client'), $('#directory'));
+                        });
+
+
+                        $('#praada').on('focusout', '#date', function () {
+                            set_directory($('#client'), $('#directory'));
+                        });
+
+
+                        //praada_nav with start_date only
+                        $('#praada').on('click', '#praada_nav', function () {
+                            //alert('running praada_nav');
+                            $.getJSON(
+                                    '/praada_generator',
+                                    {
+                                        command: 'praada_nav',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        start_date: $('#start_date').val(),
+                                        end_date: $('#end_date').val(),
+                                        pg_cusipfile_select: $('#pg_cusipfile_select option:selected').val(),
+                                        pg_cusipfile: $('#pg_cusipfile').val(),
+                                        rpt_tag_select: $('#rpt_tag_select option:selected').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        directory:$('#directory').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+
+                       //praada_nav with no blob
+                        $('#praada').on('click', '#praada_nav_no_blob', function () {
+                            $.getJSON(
+                                    '/praada_generator',
+                                    {
+                                        command: 'praada_nav_no_blob',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        start_date: $('#start_date').val(),
+                                        end_date: $('#end_date').val(),
+                                        pg_cusipfile_select: $('#pg_cusipfile_select option:selected').val(),
+                                        pg_cusipfile: $('#pg_cusipfile').val(),
+                                        rpt_tag_select: $('#rpt_tag_select option:selected').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        directory:$('#directory').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+                        //cra_wrapper to run cra
+                        $('#praada').on('click', '#cra_wrapper_cra', function () {
+                            $.getJSON(
+                                    '/praada_generator',
+                                    {
+                                        command: 'cra_wrapper_cra',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        start_date: $('#start_date').val(),
+                                        end_date: $('#end_date').val(),
+                                        pg_cusipfile_select: $('#pg_cusipfile_select option:selected').val(),
+                                        pg_cusipfile: $('#pg_cusipfile').val(),
+                                        rpt_tag_select: $('#rpt_tag_select option:selected').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        directory:$('#directory').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+
+                        //cra_wrapper to run daiy praada
+                        $('#praada').on('click', '#cra_wrapper_praada', function () {
+                            $.getJSON(
+                                    '/praada_generator',
+                                    {
+                                        command: 'cra_wrapper_praada',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        start_date: $('#start_date').val(),
+                                        end_date: $('#end_date').val(),
+                                        pg_cusipfile_select: $('#pg_cusipfile_select option:selected').val(),
+                                        pg_cusipfile: $('#pg_cusipfile').val(),
+                                        rpt_tag_select: $('#rpt_tag_select option:selected').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        directory:$('#directory').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+                        
+                        
+                        
+                        //date_looper cra
+                        $('#praada').on('click', '#cra_date_looper', function () {
+                            $.getJSON(
+                                    '/praada_generator',
+                                    {
+                                        command: 'cra_date_looper',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        start_date: $('#start_date').val(),
+                                        end_date: $('#end_date').val(),
+                                        pg_cusipfile_select: $('#pg_cusipfile_select option:selected').val(),
+                                        pg_cusipfile: $('#pg_cusipfile').val(),
+                                        rpt_tag_select: $('#rpt_tag_select option:selected').val(),
+                                        breakdown: $('#breakdown').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        directory:$('#directory').val(),
+                                        tag: $('#tag').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+                        
+
+                    }
+            );
+
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="praada">
+            <div data-role="header">
+                <a href="/command_generator" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <h1>praada/cra command generator</h1>
+            </div>
+            <div data-role="content">
+                <table>
+                    <tr>
+                        <td><label for="client">Client</label></td>
+                        <td><input data-clear-btn="true" name="client" id="client" value="{{client}}" placeholder="Enter Client alias"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Package</label></td>
+                        <td><input data-clear-btn="true" name="package" id="package" value="{{package}}" placeholder="Enter the package"></td>
+                    </tr>                    
+                    <tr>
+                        <td><label for="date">Date for cra_wrapper or cra runs</label></td>
+                        <td><input data-clear-btn="true" name="date" id="date" value="{{date}}" placeholder="Enter the date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="start_date">Start date for praada runs</label></td>
+                        <td><input data-clear-btn="true" name="start_date" id="start_date" value="{{start_date}}" placeholder="Enter the start date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="end_date">End date for praada runs</label></td>
+                        <td><input data-clear-btn="true" name="end_date" id="end_date" value="{{end_date}}" placeholder="Enter the end date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="directory">Directory</label></td>
+                        <td><input data-clear-btn="true" name="directory" id="directory" value="{{directory}}" placeholder="Enter the directory"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="pg_cusipfile_select" id="pg_cusipfile_select">                                    
+                                    <option value="pg">Portgroup</option>
+                                    <option value="file">File of cusips</option>                                    
+                                </select>
+                            </div> 
+                        </td>
+                        <td><input data-clear-btn="true" name="pg_cusipfile" id="pg_cusipfile" value="{{pg_cusipfile}}" placeholder="Enter port group or cusip file"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="rpt_tag">Choose report tag</label></td>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="rpt_tag_select" id="rpt_tag_select">
+                                    <option value="praada_pnl_detail">praada_pnl_detail</option>
+                                    <option value="praada_pnl_ts_debug2">praada_pnl_ts_debug2</option>
+                                    <option value="praada_attrib_mv_wtd">praada_attrib_mv_wtd</option>
+                                </select>
+                            </div> 
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td><label for="breakdown">Breakdown</label></td>
+                        <td><input data-clear-btn="true" name="breakdown" id="breakdown" value="{{breakdown}}" placeholder="Enter the sector/breakdown"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="px_hier">Price hierarchy</label></td>
+                        <td><input data-clear-btn="true" name="px_hier" id="px_hier" value="{{px_hier}}" placeholder="Enter the price hierarchy"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="rk_hier">Risk hierarchy</label></td>
+                        <td><input data-clear-btn="true" name="rk_hier" id="rk_hier" value="{{rk_hier}}" placeholder="Enter risk hierarchy"></td>
+                    </tr>          
+                    <tr>
+                        <td><label for="tag">Tag</label></td>
+                        <td><input data-clear-btn="true" name="tag" id="tag" value="{{tag}}" placeholder="Enter the tag"></td>
+                    </tr>                    
+                </table>
+                <ul data-role="listview" data-inset="true" data-filter="true">
+                    <li><a id="praada_nav" href="#">praada_nav with just start_date, runs month to date</a></li>
+                    <li><a id="praada_nav_no_blob" href="#">praada_nav with no blob</a></li>
+                    <li><a id="cra_wrapper_cra" href="#">Run cra via cra_wrapper</a></li>
+                    <li><a id="cra_wrapper_praada" href="#">Run daily praada via cra_wrapper</a></li>
+                    <li><a id="cra_date_looper" href="#">cra date looper</a></li>
+                </ul>
+                <div id="command" class="command"></div>
+                <textarea name="command_textarea" id="command_textarea" data-enhanced="true" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all"></textarea>
+            </div><!-- content end -->            
+        </div><!-- page end-->
+    </body>
+</html>

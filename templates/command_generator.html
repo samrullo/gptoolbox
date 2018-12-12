@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Command generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    </head>
+    <body>
+        <div data-role="page">
+            <div data-role="header">
+                <a href="/" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <h1> Choose the command template</h1>
+            </div>
+            <div data-role="content">
+                <ui data-role="listview" data-inset="true" data-filter="true">
+                    <li><a href="/pms">PMS</a></li>
+                    <li><a href="/cnc">CNC</a></li>
+                    <li><a href="/master_batcher">master_batcher/OasBatch price/risk</a></li>
+                    <li><a href="/pkg_batcher">package_batcher/AggAll command generator</a></li>
+                    <li><a href="/praada">praada/cra command generator</a></li>
+                </ui>
+            </div>
+        </div><!-- end main page-->
+    </body>
+</html>

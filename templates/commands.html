@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>GPAS Command generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <style>
+            .command{                
+                padding:5px;
+                margin: 5px;
+            }
+            .command_keyword{
+                color:red;
+            }
+            .command_switch{
+                color:green;
+            }
+            label{
+                font-size: 20px;
+            }
+            table{
+                border:none;                
+            }
+            th,td{
+                padding:5px;
+                text-align: left;                
+            }
+            .tbl{
+
+            }
+        </style>
+        <script>
+            function set_directory_and_tag(client, directory, tag) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+
+                tag.val(client.val().toUpperCase() + " " + tag.val());
+            }
+
+            function set_directory(client, directory) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+            }
+
+            $(document).ready(
+                    function () {
+
+                        $('#pms').on('focusout', '#client', function () {
+                            set_directory_and_tag($('#client'), $('#directory'), $('#tag'));
+                        });
+
+
+                        $('#pms').on('focusout', '#package', function () {
+                            set_directory($('#client'), $('#directory'));
+                        });
+
+
+                        $(document).on('focusout', '#date', function () {
+                            set_directory($('#client'), $('#directory'));
+                        });
+
+
+                        //generic pms command generator
+                        $(document).on('click', '#generic_pms', function () {
+                            if ($('#fund_pg_select option:selected').val() != 'file') {
+                                fund = $('#fund').val().toUpperCase();
+                            } else {
+                                fund = $('#fund').val();
+                            }
+                            pms_cmd = "<span class=\"command_keyword\">pms_batch.pl</span> <span class=\"command_switch\">-" + $('#fund_pg_select option:selected').val() + "</span> " + fund;
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\"> -cmd</span> \"" + $('#date').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-gpsettings</span> GP:DAILY <span class=\"command_switch\">-ignorePublish</span>\" <span class=\"command_switch\">-pkg</span> " + $('#package').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-dir</span> " + $('#directory').val();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-tag</span> \"" + $('#tag').val() + "\"";
+
+                            $('#command').html(pms_cmd);
+                            $('#command_textarea').val($('#command').text());
+                        });
+
+
+                        //write compliance binary pms
+                        $(document).on('click', '#compl_pms', function () {
+                            if ($('#fund_pg_select option:selected').val() != 'file') {
+                                fund = $('#fund').val().toUpperCase();
+                            } else {
+                                fund = $('#fund').val();
+                            }
+                            pms_cmd = "<span class=\"command_keyword\">pms_batch.pl</span> <span class=\"command_switch\">-" + $('#fund_pg_select option:selected').val() + "</span> " + fund;
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\"> -cmd</span> \"" + $('#date').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-complBin</span> <span class=\"command_switch\">-gpsettings</span> GP:DAILY <span class=\"command_switch\">-complBin</span> <span class=\"command_switch\">-ignorePublish</span>\""
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-pkg</span> " + $('#package').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-dir</span> " + $('#directory').val();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-tag</span> \"" + $('#tag').val() + "\"";
+
+                            $('#command').html(pms_cmd);
+                            $('#command_textarea').val($('#command').text());
+                        });
+
+
+                        //exposure pms command generator
+                        $(document).on('click', '#exposure_pms', function () {
+                            if ($('#fund_pg_select option:selected').val() != 'file') {
+                                fund = $('#fund').val().toUpperCase();
+                            } else {
+                                fund = $('#fund').val();
+                            }
+                            pms_cmd = "<span class=\"command_keyword\">pms_batch.pl</span> <span class=\"command_switch\">-" + $('#fund_pg_select option:selected').val() + "</span> " + fund;
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\"> -cmd</span> \"" + $('#date').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-gpsettings</span> GP:DAILY:i <span class=\"command_switch\">-ignorePublish</span>";
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-save_exposure</span> <span class=\"command_switch\">-save_exp_purpose</span> P100 \"";
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-pkg</span> " + $('#package').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-dir</span> " + $('#directory').val();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-tag</span> \"" + $('#tag').val() + "\"";
+                            $('#command').html(pms_cmd);
+                            $('#command_textarea').val($('#command').text());
+                            //document.getElementById('command').innerHTML="pms command will go here...";
+                        });
+
+                        //write sector/breakdown pms command generator
+                        $(document).on('click', '#sector_pms', function () {
+                            if ($('#fund_pg_select option:selected').val() != 'file') {
+                                fund = $('#fund').val().toUpperCase();
+                            } else {
+                                fund = $('#fund').val();
+                            }
+                            pms_cmd = "<span class=\"command_keyword\">pms_batch.pl</span> <span class=\"command_switch\">-" + $('#fund_pg_select option:selected').val() + "</span> " + fund;
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\"> -cmd</span> \"" + $('#date').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-gpsettings</span> GP:DAILY:i <span class=\"command_switch\">-ignorePublish</span>";
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-writeSectorMap</span> " + $('#sector').val().toUpperCase() + " \"";
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-pkg</span> " + $('#package').val().toUpperCase();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-dir</span> " + $('#directory').val();
+                            pms_cmd = pms_cmd + " <span class=\"command_switch\">-tag</span> \"" + $('#tag').val() + "\"";
+                            $('#command').html(pms_cmd);
+                            $('#command_textarea').val($('#command').text());
+                            //document.getElementById('command').innerHTML="pms command will go here...";
+                        });
+                    }
+            );
+
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="pms">
+            <div data-role="panel" id="command_choose_panel" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-open">
+                <div class="ui-panel-inner">
+                    <h1>Choose template</h1>
+                    <ul data-role="listview" data-inset="true" data-filter="true">
+                        <li><a href="#pms">PMS template</a></li>
+                        <li><a href="#cnc">CNC template</a></li>
+                        <li><a href="#master_batcher">master_batcher template</a></li>
+                        <li><a href="#oasbatch">Oasbatch template</a></li>
+                    </ul>                    
+                </div>
+            </div>
+            <div data-role="header">
+                <a href="#command_choose_panel">Choose Template</a>
+                <h1>PMS command generator</h1>
+            </div>
+            <div data-role="content">
+
+                <table>
+                    <tr>
+                        <td><label for="client">Client</label></td>
+                        <td><input data-clear-btn="true" name="client" id="client" value="" placeholder="Enter Client alias"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Package</label></td>
+                        <td><input data-clear-btn="true" name="package" id="package" value="" placeholder="Enter the package"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="fund_pg_select" id="fund_pg_select">
+                                    <option value="fund">Fund</option>
+                                    <option value="pg">Portgroup</option>
+                                    <option value="file">File of funds</option>                                    
+                                </select>
+                            </div> 
+                        </td>
+                        <td><input data-clear-btn="true" name="fund" id="fund" value="" placeholder="Enter the fund"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Date</label></td>
+                        <td><input data-clear-btn="true" name="date" id="date" value="" placeholder="Enter the date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="directory">Directory</label></td>
+                        <td><input data-clear-btn="true" name="directory" id="directory" value="/d0/prod1/reports/" placeholder="Enter the directory"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tag">Tag</label></td>
+                        <td><input data-clear-btn="true" name="tag" id="tag" value="running scratch " placeholder="Enter the tag"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="sector">Sector/Breakdown</label></td>
+                        <td><input data-clear-btn="true" name="sector" id="sector" value=" " placeholder="Enter the sector/breakdown"></td>
+                    </tr>
+
+                </table>
+                <ul data-role="listview" data-inset="true" data-filter="true">
+                    <li><a id="generic_pms" href="#">Generic pms</a></li>
+                    <li><a id="compl_pms" href="#">Write compliance binary pms</a></li>
+                    <li><a id="exposure_pms" href="#">Save exposure pms</a></li>
+                    <li><a id="sector_pms" href="#">Update sector/breakdown pms</a></li>
+                </ul>
+                <div id="command" class="command"></div>
+                <textarea name="command_textarea" id="command_textarea" data-enhanced="true" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all"></textarea>
+
+            </div><!-- pms content end -->
+
+            <div data-role="footer">copyright@GpasTokyo</div>
+        </div><!-- pms page end-->
+
+        <!------- cnc page start ------->
+        <div data-role="page" id="cnc">
+            <div data-role="panel" id="command_choose_panel" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-open">
+                <div class="ui-panel-inner">
+                    <h1>Choose template</h1>
+                    <ul data-role="listview" data-inset="true" data-filter="true">
+                        <li><a href="#pms">PMS template</a></li>
+                        <li><a href="#cnc">CNC template</a></li>
+                        <li><a href="#master_batcher">master_batcher template</a></li>
+                        <li><a href="#oasbatch">Oasbatch template</a></li>
+                    </ul>                    
+                </div>
+            </div>
+            <div data-role="header">
+                <a href="#command_choose_panel">Choose Template</a>
+                <h1>CNC command generator</h1>
+            </div>
+            <div data-role="content">
+
+                <table>
+                    <tr>
+                        <td><label for="client">Client</label></td>
+                        <td><input data-clear-btn="true" name="client_cnc" id="client" value="" placeholder="Enter Client alias"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package_cnc">Package</label></td>
+                        <td><input data-clear-btn="true" name="package" id="package" value="" placeholder="Enter the package"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="fund_pg_select" id="fund_pg_select">
+                                    <option value="fund">Fund</option>
+                                    <option value="pg">Portgroup</option>
+                                    <option value="file">File of funds</option>                                    
+                                </select>
+                            </div> 
+                        </td>
+                        <td><input data-clear-btn="true" name="fund" id="fund" value="" placeholder="Enter the fund"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Date</label></td>
+                        <td><input data-clear-btn="true" name="date" id="date" value="" placeholder="Enter the date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="directory">Directory</label></td>
+                        <td><input data-clear-btn="true" name="directory" id="directory" value="/d0/prod1/reports/" placeholder="Enter the directory"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tag">Tag</label></td>
+                        <td><input data-clear-btn="true" name="tag" id="tag" value="running scratch " placeholder="Enter the tag"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="sector">Sector/Breakdown</label></td>
+                        <td><input data-clear-btn="true" name="sector" id="sector" value=" " placeholder="Enter the sector/breakdown"></td>
+                    </tr>
+
+                </table>
+                <ul data-role="listview" data-inset="true" data-filter="true">
+                    <li><a id="generic_pms" href="#">Generic pms</a></li>
+                    <li><a id="compl_pms" href="#">Write compliance binary pms</a></li>
+                    <li><a id="exposure_pms" href="#">Save exposure pms</a></li>
+                    <li><a id="sector_pms" href="#">Update sector/breakdown pms</a></li>
+                </ul>
+                <div id="command" class="command"></div>
+                <textarea name="command_textarea" id="command_textarea" data-enhanced="true" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all"></textarea>
+
+            </div><!-- cnc content end -->
+
+            <div data-role="footer">copyright@GpasTokyo</div>
+        </div><!-- cnc page end-->
+    </body>
+</html>

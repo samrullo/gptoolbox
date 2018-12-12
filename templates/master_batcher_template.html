@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>master_batcher Command generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <style>
+            .command{                
+                padding:5px;
+                margin: 5px;
+            }
+            .command_keyword{
+                color:red;
+            }
+            .command_switch{
+                color:green;
+            }
+            label{
+                font-size: 20px;
+            }
+            table{
+                border:none;                
+            }
+            th,td{
+                padding:5px;
+                text-align: left;                
+            }
+            .tbl{
+
+            }
+        </style>
+        <script>
+            function set_directory_and_tag(client, directory, tag) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+
+                tag.val(client.val().toUpperCase() + " " + tag.val());
+            }
+
+            function set_directory(client, directory) {
+                if (client.val() == 'ben') {
+                    directory.val("/d0/prod1/reports/" + $('#package').val().toUpperCase() + "/gp_views/" + $('#package').val().toUpperCase() + "/" + $('#date').val());
+                } else {
+                    directory.val("/d0/prod1/reports/gp_reports/MAIN/" + $('#date').val());
+                }
+            }
+
+            $(document).ready(
+                    function () {
+
+                        //generic master_batcher price command generator
+                        $('#master_batcher').on('click', '#price', function () {
+                            $.getJSON(
+                                    '/master_batcher_generator',
+                                    {
+                                        command: 'price',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        pg_cusip_select: $('#pg_cusip_select option:selected').val(),
+                                        pg_cusip_file: $('#pg_cusip_file').val(),
+                                        tag: $('#tag').val(),
+                                        bcsettings: $('#bcsettings').val(),
+                                        bcsettings_ver: $('#bcsettings_ver').val(),
+                                        write_purpose: $('#write_purpose').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+
+                        //generic OasBatch price command generator
+                        $('#master_batcher').on('click', '#oas_price', function () {
+                            $.getJSON(
+                                    '/master_batcher_generator',
+                                    {
+                                        command: 'oas_price',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        rk_run_type: $('#rk_run_type_select option:selected').val(),
+                                        pg_cusip_select: $('#pg_cusip_select option:selected').val(),
+                                        pg_cusip_file: $('#pg_cusip_file').val(),
+                                        tag: $('#tag').val(),
+                                        bcsettings: $('#bcsettings').val(),
+                                        bcsettings_ver: $('#bcsettings_ver').val(),
+                                        write_purpose: $('#write_purpose').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+
+                        //generic master_batcher risk command generator
+                        $('#master_batcher').on('click', '#risk', function () {
+                            $.getJSON(
+                                    '/master_batcher_generator',
+                                    {
+                                        command: 'risk',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        rk_run_type: $('#rk_run_type_select option:selected').val(),
+                                        pg_cusip_select: $('#pg_cusip_select option:selected').val(),
+                                        pg_cusip_file: $('#pg_cusip_file').val(),
+                                        tag: $('#tag').val(),
+                                        bcsettings: $('#bcsettings').val(),
+                                        bcsettings_ver: $('#bcsettings_ver').val(),
+                                        write_purpose: $('#write_purpose').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+
+
+                        //generic OasBatch risk command generator
+                        $('#master_batcher').on('click', '#oas_risk', function () {
+                            $.getJSON(
+                                    '/master_batcher_generator',
+                                    {
+                                        command: 'oas_risk',
+                                        client: $('#client').val(),
+                                        package: $('#package').val(),
+                                        date: $('#date').val(),
+                                        px_hier: $('#px_hier').val(),
+                                        rk_hier: $('#rk_hier').val(),
+                                        rk_run_type: $('#rk_run_type_select option:selected').val(),
+                                        pg_cusip_select: $('#pg_cusip_select option:selected').val(),
+                                        pg_cusip_file: $('#pg_cusip_file').val(),
+                                        tag: $('#tag').val(),
+                                        bcsettings: $('#bcsettings').val(),
+                                        bcsettings_ver: $('#bcsettings_ver').val(),
+                                        write_purpose: $('#write_purpose').val()
+                                    },
+                                    function (data) {
+                                        $('#command').html(data.result);
+                                        $('#command_textarea').val($('#command').text());
+                                    }
+                            );
+                        });
+                    }
+            );
+
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="master_batcher">
+
+            <div data-role="header">
+                <a href="/command_generator" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <h1>master_batcher/OasBatch price/risk command generator</h1>
+            </div>
+            <div data-role="content">
+
+                <table>
+                    <tr>
+                        <td><label for="client">Client</label></td>
+                        <td><input data-clear-btn="true" name="client" id="client" value="{{client}}" placeholder="Enter Client alias"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="package">Package</label></td>
+                        <td><input data-clear-btn="true" name="package" id="package" value="{{package}}" placeholder="Enter the package"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="pg_cusip_select" id="pg_cusip_select">
+                                    <option value="c">Cusip file path</option>
+                                    <option value="pg">Port group</option>
+                                </select>
+                            </div> 
+                        </td>
+                        <td><input data-clear-btn="true" name="pg_cusip_file" id="pg_cusip_file" value="cusips" placeholder="Enter the pg or cusip file"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="date">Date</label></td>
+                        <td><input data-clear-btn="true" name="date" id="date" value="{{date}}" placeholder="Enter the date in yyyymmdd or mm/dd/yyyy format"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="px_hier">Price hierarchy</label></td>
+                        <td><input data-clear-btn="true" name="px_hier" id="px_hier" value="{{px_hier}}" placeholder="Enter the price hierarchy"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="rk_hier">Risk hierarchy</label></td>
+                        <td><input data-clear-btn="true" name="rk_hier" id="rk_hier" value="{{rk_hier}}" placeholder="Enter risk hierarchy"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="rk_run_type">Risk run type</label></td>
+                        <td>
+                            <div class="ui-field-contain">                                
+                                <select name="rk_run_type_select" id="rk_run_type_select">
+                                    <option value="DAILY">DAILY</option>
+                                    <option value="WEEKEND">WEEKEND</option>                                    
+                                </select>
+                            </div> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="tag">Tag</label></td>
+                        <td><input data-clear-btn="true" name="tag" id="tag" value="{{tag}}" placeholder="Enter the tag"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="write_purpose">Write purpose</label></td>
+                        <td><input data-clear-btn="true" name="write_purpose" id="write_purpose" value="{{write_purpose}}" placeholder="Enter alternative purpose"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="bcsettings">BCSettings</label></td>
+                        <td><input data-clear-btn="true" name="bcsettings" id="bcsettings" value="{{bcsettings}}" placeholder="Enter alternative bcsettings"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="bcsettings_ver">BCSettings version</label></td>
+                        <td><input data-clear-btn="true" name="bcsettings_ver" id="bcsettings_ver" value="{{bcsettings_ver}}" placeholder="Enter alternative bcsettings version"></td>
+                    </tr>
+                </table>
+                <ul data-role="listview" data-inset="true" data-filter="true">
+                    <li><a id="price" href="#">master_batcher price</a></li>
+                    <li><a id="oas_price" href="#">OasBatch price</a></li>
+                    <li><a id="risk" href="#">master_batcher risk</a></li>
+                    <li><a id="oas_risk" href="#">OasBatch risk</a></li>
+                </ul>
+                <div id="command" class="command"></div>
+                <textarea name="command_textarea" id="command_textarea" data-enhanced="true" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all"></textarea>
+            </div><!-- content end -->            
+        </div><!-- page end-->
+    </body>
+</html>
