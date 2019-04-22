@@ -1,0 +1,109 @@
+{% extends "index.html" %}
+{% block content %}
+<form name="pms" action="" method="post" class="form-horizontal" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.client.label }}</label>
+        <div class="col-sm-10">
+            {{ form.client() }}
+        </div>
+        {% for error in form.client.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.package.label }}</label>
+        <div class="col-sm-10">
+            {{ form.package() }}
+        </div>
+        {% for error in form.package.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Choose fund/pg/cusip file</label>
+        <div class="col-sm-10">
+            {{ form.fund_pg_select() }}
+        </div>
+        {% for error in form.fund_pg_select.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Enter fund/pg/cusip file name</label>
+        <div class="col-sm-10">
+            {{ form.fund() }}
+        </div>
+        {% for error in form.fund.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.date.label }}</label>
+        <div class="col-sm-10">
+            {{ form.date() }}
+        </div>
+        {% for error in form.date.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.directory.label }}</label>
+        <div class="col-sm-10">
+            {{ form.directory(size=70) }}
+        </div>
+        {% for error in form.directory.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.tag.label }}</label>
+        <div class="col-sm-10">
+            {{ form.tag() }}
+        </div>
+        {% for error in form.tag.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.rpt_tag.label }}</label>
+        <div class="col-sm-10">
+            {{ form.rpt_tag() }}
+        </div>
+        {% for error in form.rpt_tag.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">{{ form.sector.label }}</label>
+        <div class="col-sm-10">
+            {{ form.sector() }}
+        </div>
+        {% for error in form.sector.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Command type</label>
+        <div class="col-sm-10">{{ form.cmd_type() }}</div>
+        {% for error in form.cmd_type.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">{{ form.submit() }}</div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">{{command | safe }}</div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <textarea class="form-control"> {{ command | safe }}</textarea>
+        </div>
+    </div>
+    </div>
+</form>
+
+
+{% endblock %}
