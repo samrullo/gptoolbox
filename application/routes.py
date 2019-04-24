@@ -1,7 +1,8 @@
 from application import app
-from flask import render_template, redirect
+from flask import render_template, redirect, session
 from application.gpprograms.pms import PMSForm, PMS
 import logging
+import datetime
 
 _logger = logging.getLogger(__name__)
 _logger.setLevel(logging.INFO)
@@ -19,9 +20,24 @@ def index():
 def pms():
     _logger.info("Starting pms route...")
     form = PMSForm()
+    if form.client.data != session.get('client') and form.client.data:
+        session['client'] = form.client.data
+    if form.package.data != session.get('package') and form.package.data:
+        session['package'] = form.package.data
+    if form.client.data != 'BEN':
+        if not form.directory.data:
+            form.directory.data = '/d0/reports/gp_reports/MAIN/{}'.format(
+                datetime.datetime.strftime(form.date.data, format='%Y%m%d'))
+    if not form.tag.data:
+        form.tag.data = '{} : {} running scratch'.format(form.client.data, form.fund.data)
+    form.client.data = session.get('client')
+    form.package.data = session.get('package')
     command = ""
     html_command = ""
     if form.validate_on_submit():
+        # session['pms'] = {'client': form.client.data.upper, 'package': form.package.data}
+        session.pop('client', None)
+        session['client'] = form.client.data
         _logger.info("Tag data is :{}".format(form.tag.data))
         pms = PMS(form=form)
         command = pms.get_command()
