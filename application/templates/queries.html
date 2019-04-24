@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Key</th>
+            <th>Query</th>
+        </tr>
+        </thead>
+        <tbody id="myTable">
+        {% for i,row in queries.iterrows(): %}
+        <tr>
+            <td>{{row['key']}}</td>
+            <td>{{row['query']}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

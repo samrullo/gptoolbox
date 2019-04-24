@@ -4,8 +4,8 @@
       <a class="navbar-brand" href="#">GPAS Toolbox</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="{% if index %} active {% endif %}"><a href="#">Home</a></li>
-      <li class="{% if queries %} active {% endif %}"><a href="#">Queries</a></li>
+      <li class="{% if home %} active {% endif %}"><a href="{{ url_for('index') }}">Home</a></li>
+      <li class="{% if query %} active {% endif %}"><a href="{{ url_for('query') }}">Queries</a></li>
       <li class="{% if pms %} active {% endif %}"><a href="{{ url_for('pms') }} ">PMS commands</a></li>
       <li class="{% if cnc %} active {% endif %}"><a href="{{ url_for('cnc')}} ">CnC commands</a></li>
       <li class="{% if risk %} active {% endif %}"><a href="{{ url_for('risk')}} ">master_batcher/OasBatch commands</a></li>

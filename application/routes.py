@@ -1,8 +1,10 @@
 from application import app
-from flask import render_template, redirect, session
+from flask import render_template, redirect, session, url_for
 from application.gpprograms.pms import PMSForm, PMS
 import logging
 import datetime
+from sqlalchemy import create_engine
+import pandas as pd
 
 _logger = logging.getLogger(__name__)
 _logger.setLevel(logging.INFO)
@@ -13,7 +15,15 @@ logging.basicConfig()
 @app.route("/home")
 @app.route("/index")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", home=True)
+
+
+@app.route("/query")
+def query():
+    engine = create_engine('sqlite:///application/db/gptoolbox.db')
+    df = pd.read_sql("select * from queries", engine)
+    _logger.info("First rows of dataframe:{}".format(df.head()))
+    return render_template('queries.html', queries=df, query=True)
 
 
 @app.route("/pms", methods=['GET', 'POST'])
@@ -44,7 +54,7 @@ def pms():
         html_command = pms.get_html_command()
     else:
         _logger.info("validation was unsuccessful...")
-    return render_template("pms_template.html", form=form, command=command, html_command=html_command)
+    return render_template("pms_template.html", form=form, command=command, html_command=html_command, pms=True)
 
 
 @app.route("/cnc")
