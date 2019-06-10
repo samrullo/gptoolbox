@@ -8,7 +8,7 @@ import datetime
 class PMS:
     def __init__(self, form: FlaskForm = None):
         self.form = form
-        yyyymmdd_date = datetime.datetime.strftime(form.date.data, format='%Y%m%d')
+        yyyymmdd_date = datetime.datetime.strftime(form.date.data, '%Y%m%d')
         client = form.client.data.upper()
         tag = form.tag.data.upper()
         package = form.package.data.upper()

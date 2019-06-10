@@ -37,7 +37,7 @@ def pms():
     if form.client.data != 'BEN':
         if not form.directory.data:
             form.directory.data = '/d0/reports/gp_reports/MAIN/{}'.format(
-                datetime.datetime.strftime(form.date.data, format='%Y%m%d'))
+                datetime.datetime.strftime(form.date.data, '%Y%m%d'))
     if not form.tag.data:
         form.tag.data = '{} : {} running scratch'.format(form.client.data, form.fund.data)
     form.client.data = session.get('client')
