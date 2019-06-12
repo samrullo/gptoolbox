@@ -1,6 +1,7 @@
 from application import app
 from flask import render_template, redirect, session, url_for
 from application.gpprograms.pms import PMSForm, PMS
+from application.gpprograms.cnc import CNCForm,CNC
 import logging
 import datetime
 from sqlalchemy import create_engine
@@ -57,9 +58,35 @@ def pms():
     return render_template("pms_template.html", form=form, command=command, html_command=html_command, pms=True)
 
 
-@app.route("/cnc")
+@app.route("/cnc", methods=['GET', 'POST'])
 def cnc():
-    return render_template("pms_template.html")
+    _logger.info("Starting cnc route...")
+    form = CNCForm()
+    if form.client.data != session.get('client') and form.client.data:
+        session['client'] = form.client.data
+    if form.package.data != session.get('package') and form.package.data:
+        session['package'] = form.package.data
+    if form.client.data != 'BEN':
+        if not form.directory.data:
+            form.directory.data = '/d0/reports/gp_reports/MAIN/{}'.format(
+                datetime.datetime.strftime(form.date.data, '%Y%m%d'))
+    if not form.tag.data:
+        form.tag.data = '{} : {} running scratch'.format(form.client.data, form.fund.data)
+    form.client.data = session.get('client')
+    form.package.data = session.get('package')
+    command = ""
+    html_command = ""
+    if form.validate_on_submit():
+        # session['pms'] = {'client': form.client.data.upper, 'package': form.package.data}
+        session.pop('client', None)
+        session['client'] = form.client.data
+        _logger.info("Tag data is :{}".format(form.tag.data))
+        cnc = CNC(form=form)
+        command = cnc.get_command()
+        html_command = cnc.get_html_command()
+    else:
+        _logger.info("validation was unsuccessful...")
+    return render_template("cnc_template.html", form=form, command=command, html_command=html_command, cnc=True)
 
 
 @app.route("/risk")
